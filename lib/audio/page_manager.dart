@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class PageManager {
-
   final progressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
@@ -14,13 +14,20 @@ class PageManager {
 
   late AudioPlayer _audioPlayer;
 
-  final String audioUrl;
-  PageManager(this.audioUrl) {
+  final String audioPath;
+  PageManager(this.audioPath) {
     _init();
+  }
+
+  Future<String> getDownloadURL(String path) async {
+    return await FirebaseStorage.instance.ref(path).getDownloadURL();
   }
 
   void _init() async {
     _audioPlayer = AudioPlayer();
+    // TODO: Get the firebase storage url using library
+    final audioUrl = await getDownloadURL(audioPath);
+    print('Obtained audio url: $audioUrl');
     await _audioPlayer.setUrl(audioUrl);
 
     _audioPlayer.playerStateStream.listen((playerState) {

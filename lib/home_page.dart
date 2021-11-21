@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player_new/audio/audio_model.dart';
+import 'package:music_player_new/auth/auth_page.dart';
 
 import 'audio/audio_page.dart';
 
@@ -17,6 +19,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Audio Player'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: InkWell(
+              onTap: () {
+                logout();
+              },
+              child: Icon(
+                Icons.logout,
+              ),
+            ),
+          )
+        ],
       ),
       body: Center(
         child: Column(
@@ -55,6 +70,15 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future logout() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      CupertinoPageRoute(builder: (context) => const AuthPage()),
+      (_) => false,
     );
   }
 }
