@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player_new/auth/auth_page.dart';
 import 'package:music_player_new/home_page.dart';
+import 'package:music_player_new/introduction/introduction_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -33,6 +34,17 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _checkAuthStatusAndProceed() async {
+    // Show introduction page
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => IntroductionPage()),
+        (route) => false,
+      );
+    });
+    return;
+    // TODO:
+    // Shows the authentication or home page based on sign in state
     final isSignedIn = FirebaseAuth.instance.currentUser != null;
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       Navigator.pushAndRemoveUntil(
